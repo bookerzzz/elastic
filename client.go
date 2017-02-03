@@ -337,11 +337,13 @@ func (c *Client) String() string {
 }
 
 func (c *Client) nextURL() string {
+	c.mu.Lock()
 	pick := c.urls[c.urlIndex]
 	c.urlIndex++
 	if c.urlIndex == len(c.urls) {
 		c.urlIndex = 0
 	}
+	c.mu.Unlock()
 	return pick
 }
 
