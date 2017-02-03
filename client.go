@@ -438,7 +438,6 @@ func (c *Client) PerformRequestC(ctx context.Context, method, path string, param
 	c.mu.RUnlock()
 
 	var err error
-	var conn *conn
 	var req *Request
 	var resp *Response
 	var n int
@@ -489,13 +488,9 @@ func (c *Client) PerformRequestC(ctx context.Context, method, path string, param
 			n++
 			wait, ok, rerr := c.retrier.Retry(ctx, n, (*http.Request)(req), res, err)
 			if rerr != nil {
-				c.errorf("elastic: %s is dead", conn.URL())
-				conn.MarkAsDead()
 				return nil, rerr
 			}
 			if !ok {
-				c.errorf("elastic: %s is dead", conn.URL())
-				conn.MarkAsDead()
 				return nil, err
 			}
 			time.Sleep(wait)
@@ -515,9 +510,6 @@ func (c *Client) PerformRequestC(ctx context.Context, method, path string, param
 
 		// Tracing
 		c.dumpResponse(res)
-
-		// We successfully made a request with this connection
-		conn.MarkAsHealthy()
 
 		resp, err = c.newResponse(res)
 		if err != nil {
