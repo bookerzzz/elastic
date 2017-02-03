@@ -60,7 +60,6 @@ func TestRetrier(t *testing.T) {
 	client, err := NewClient(
 		SetHttpClient(httpClient),
 		SetMaxRetries(5),
-		SetHealthcheck(false),
 		SetRetrier(retrier))
 	if err != nil {
 		t.Fatal(err)
@@ -102,7 +101,6 @@ func TestRetrierWithError(t *testing.T) {
 	client, err := NewClient(
 		SetHttpClient(httpClient),
 		SetMaxRetries(5),
-		SetHealthcheck(false),
 		SetRetrier(retrier))
 	if err != nil {
 		t.Fatal(err)

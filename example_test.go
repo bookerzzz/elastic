@@ -237,8 +237,6 @@ func ExampleClient_NewClient_manyOptions() {
 	// messages to os.Stdout.
 	client, err := elastic.NewClient(
 		elastic.SetURL("http://10.0.1.1:9200", "http://10.0.1.2:9200"),
-		elastic.SetSniff(false),
-		elastic.SetHealthcheckInterval(10*time.Second),
 		elastic.SetMaxRetries(5),
 		elastic.SetErrorLog(log.New(os.Stderr, "ELASTIC ", log.LstdFlags)),
 		elastic.SetInfoLog(log.New(os.Stdout, "", log.LstdFlags)))
