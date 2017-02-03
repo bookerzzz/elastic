@@ -337,6 +337,11 @@ func (c *Client) String() string {
 }
 
 func (c *Client) nextURL() string {
+	// avoid locking in case of a single URL
+	if len(c.urls) == 1 {
+		return c.urls[0]
+	}
+
 	c.mu.Lock()
 	pick := c.urls[c.urlIndex]
 	c.urlIndex++
